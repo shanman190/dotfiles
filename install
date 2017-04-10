@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+__ok() {
+    echo -e "\e[32mOK\e[0m"
+}
+
+__skipped() {
+    echo -e "\e[31mSKIPPED\e[0m"
+}
+
+echo "Initializing..."
+
+DOTFILES_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASH_DIR="${DOTFILES_DIR}/bash"
+GIT_DIR="${DOTFILES_DIR}/git"
+
+################################################################
+# Bash
+################################################################
+echo "Bash"
+echo -e -n "   .bash_profile\t"
+if [[ -f ~/.bash_profile || -z ~/.bash_profile ]]; then
+    __skipped
+else
+    ln -s "${BASH_DIR}/bash_profile" ~/.bash_profile && __ok
+fi
+
+echo -e -n "   .bashrc\t\t"
+if [[ -f ~/.bashrc || -z ~/.bash_profile ]]; then
+    __skipped
+else
+    ln -s "${BASH_DIR}/bashrc" ~/.bashrc && __ok
+fi
+
+echo -e -n "   .bash_aliases\t"
+if [[ -f ~/.bash_aliases || -z ~/.bash_aliases ]]; then
+    __skipped
+else
+    ln -s "${BASH_DIR}/bash_aliases" ~/.bash_aliases && __ok
+fi
+
+echo -e -n "   .bash_extras\t\t"
+if [[ -d ~/.bash_extras || -z ~/.bash_extras ]]; then
+    __skipped
+else
+    ln -s "${BASH_DIR}/extras/" ~/.bash_extras && __ok
+fi
+
+
+echo
+echo
+
+################################################################
+# Git
+################################################################
+echo "Git"
+echo -e -n "   .gitconfig\t\t"
+if [[ -f ~/.gitconfig || -z ~/.gitconfig ]]; then
+    __skipped
+else
+    ln -s "${GIT_DIR}/gitconfig" ~/.gitconfig && __ok
+fi

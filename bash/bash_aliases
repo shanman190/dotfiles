@@ -1,0 +1,75 @@
+if [ -d ~/bin ]; then
+  export PATH="${PATH}:~/bin"
+fi
+
+eval "$(chef shell-init bash)"
+
+# Add path helpers
+[[ -f ~/.bash-extras/path-helpers ]] && . ~/.bash-extras/path-helpers
+
+# Add Git Prompt support
+[[ -f ~/.bash-extras/git-prompt ]] && . ~/.bash-extras/git-prompt
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto -F'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+else
+    alias ls='ls -F'
+fi
+
+# some more ls aliases
+alias ll='ls -la'
+alias la='ls -A'
+alias l='ls -C'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias install_sdkman="curl -L https://get.sdkman.io | bash -"
+alias upgrade_chefdk="curl -L https://www.chef.io/chef/install.sh | sudo -E bash -s -- -P chefdk"
+alias workspace-hsize="gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize"
+alias workspace-vsize="gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize"
+
+function lattice() {
+    local command=$1
+    local latticeDirectory="/home/shannon/opt/lattice-bundle-v0.6.0"
+    local originalDirectory=$(pwd)
+    case $command in
+        status)    cd "${latticeDirectory}/vagrant/"
+                   vagrant status
+        ;;
+        start)     cd "${latticeDirectory}/vagrant/"
+                   vagrant up
+        ;;
+        stop)      cd "${latticeDirectory}/vagrant/"
+                   vagrant destroy --force
+        ;;
+        restart)   cd "${latticeDirectory}/vagrant/"
+                   vagrant destroy --force
+                   vagrant up
+        ;;
+        fixpath)   if [ "$(which ltc)" != "" ]; then
+                       echo "ltc is already configured."
+                   else 
+                       export PATH=~/opt/ltc/:$PATH
+                   fi
+        ;;
+        *)         echo "Usage: lattice (status|start|stop|restart|fixpath|upgrade)"
+                   return 1
+        ;;
+    esac
+    cd $originalDirectory
+}
