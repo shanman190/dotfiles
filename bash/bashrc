@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -105,3 +106,5 @@ fi
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/shannon/.sdkman"
 [[ -s "/home/shannon/.sdkman/bin/sdkman-init.sh" ]] && source "/home/shannon/.sdkman/bin/sdkman-init.sh"
+
+export PATH=$( puniq "${PATH}" )

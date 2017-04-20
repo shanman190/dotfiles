@@ -1,14 +1,17 @@
-if [ -d ~/bin ]; then
-  export PATH="${PATH}:~/bin"
-fi
+#!/usr/bin/env bash
+
+DOTFILES="${HOME}/.dotfiles"
 
 eval "$(chef shell-init bash)"
 
-# Add path helpers
-[[ -f ~/.bash-extras/path-helpers ]] && . ~/.bash-extras/path-helpers
+if [[ -d "${DOTFILES}"/bash/extras ]]; then
+  for file in "${DOTFILES}"/bash/extras/*; do
+    source "${file}"
+  done
+fi
 
-# Add Git Prompt support
-[[ -f ~/.bash-extras/git-prompt ]] && . ~/.bash-extras/git-prompt
+# Put the bin/ directories first on the path
+export PATH="${DOTFILES}/bin:${DOTFILES}/local/bin:${PATH}"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
