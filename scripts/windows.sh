@@ -11,8 +11,13 @@ install_dotfiles () {
 
   # symlinks
   for file_source in $(dotfiles_find \*.symlink); do
-    file_name="${file_source%.*}"
-    file_name="${file_name%.*}"
+    if [ "$msys" = true ]; then
+      file_name=${file_source%.windows.symlink}
+      file_name=${file_name%.symlink}
+    else
+      file_name=${file_source%.linux.symlink}
+      file_name=${file_name%.symlink}
+    fi
     file_dest="${HOME}/.$(basename "${file_name}")"
     install_file "copy" "${file_source}" "${file_dest}"
   done
