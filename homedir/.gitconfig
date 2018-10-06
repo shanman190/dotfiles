@@ -1,0 +1,6 @@
+[user]
+    name = Shannon Pamperl
+	email = shanman190@gmail.com
+[core]
+    excludesfile = ~/.gitignore_global
+	autocrlf = true

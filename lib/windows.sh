@@ -1,93 +1,43 @@
 #!/usr/bin/env bash
-#
-# bootstrap dotfiles
 
-source lib/common.sh
-
-install_dotfiles () {
-  overwrite_all=false
-  backup_all=false
-  skip_all=false
-
-  # symlinks
-  for file_source in $(dotfiles_find \*.symlink); do
-    if [ "$msys" = true ]; then
-      file_name=${file_source%.windows.symlink}
-      file_name=${file_name%.symlink}
-    else
-      file_name=${file_source%.linux.symlink}
-      file_name=${file_name%.symlink}
-    fi
-    file_dest="${HOME}/.$(basename "${file_name}")"
-    install_file "copy" "${file_source}" "${file_dest}"
-  done
-
-  # git repositories
-  for file_source in $(dotfiles_find \*.gitrepo); do
-    file_dest="${HOME}/.$(basename "${file_source%.*}")"
-    install_file "git" "${file_source}" "${file_dest}"
-  done
-}
-
-run_installers  () {
-  info "running installers"
-  find -L . -name install.sh | while read installer ; do run "running ${installer}" "${installer}" ; done
-  find -L . -name install.windows.sh | while read installer ; do run "running ${installer}" "${installer}" ; done
-}
-
-choco_install () {
-  set +e
-  IFS=':' read -a formula <<< "$1"
-  if ! choco list "${formula[0]}" 2> /dev/null | grep -q -E "^${formula[1]}\s"; then
-    if [ ${#formula} -gt 1 ]; then
-      output=$(choco install ${formula[0]} -y 2>&1)
-      if [ $? -eq 0 ]; then
-        success "installed ${formula[0]}"
-      else
-        fail "failed to install ${formula[0]}: ${output}"
-        exit
-      fi
-    else
-      output=$(choco install ${formula[0]} --version ${formula[1]} -y 2>&1)
-      if [ $? -eq 0 ]; then
-        success "installed ${formula[0]}:${formula[1]}"
-      else
-        fail "failed to install ${formula[0]}:${formula[1]}: ${output}"
-        exit
-      fi
-    fi
+function install_package() {
+  if [[ $# != 1 && $# != 2 ]]; then
+    error "Invalid usage"
+    exit 1
   fi
-  set -e
+
+  local package=$1
+  if [[ $# == 2 ]]; then
+    local version=$2
+
+    running "Installing ${package}:${version}"
+
+    if ! choco list "${package}" --version ${version} 2> /dev/null | grep -q -E "^${package}\s"; then
+      error "Could not find package: ${package}:${version}"
+      exit 1
+    fi
+
+    choco install "${package}" --version "${version}" --yes > /dev/null
+    ok
+  else
+    running "Installing ${package}"
+
+    if ! choco list "${package}" 2> /dev/null | grep -q -E "^${package}\s"; then
+      error "Could not find package: ${package}"
+      exit 1
+    fi
+
+    choco install "${package}" --yes > /dev/null
+    ok
+  fi
 }
 
-install_sdkman_formulas () {
-  for file in $(dotfiles_find install.sdkman); do
-    for formula in $(cat "${file}"); do
-      sdkman_install "${formula}"
-    done
-  done
-}
+function link() {
+  local source=$1
+  local target=$2
 
-install_choco_formulas () {
-  for file in $(dotfiles_find install.choco); do
-    for formula in $(cat "${file}"); do
-      choco_install "${formula}"
-    done
-  done
-}
-
-bootstrap_install () {
-  install_dotfiles
-
-  run_installers
-
-  install_sdkman_formulas
-
-  install_choco_formulas
-
-  return
-}
-
-bootstrap_update () {
-  return
+  if [[ -f ${target} ]]; then
+    rm ${target}
+  fi
+  cp ${source} ${target}
 }
