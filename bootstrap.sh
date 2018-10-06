@@ -12,9 +12,9 @@ esac
 
 # Source scripts
 if [ "$msys" = "true" ]; then
-  source scripts/windows.sh
+  source lib/windows.sh
 else
-  source scripts/linux.sh
+  source lib/linux.sh
 fi
 
 

@@ -2,7 +2,7 @@
 #
 # bootstrap dotfiles
 
-source scripts/common.sh
+source lib/common.sh
 
 install_dotfiles () {
   overwrite_all=false
