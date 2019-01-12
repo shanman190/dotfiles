@@ -105,6 +105,13 @@ fi
 
 ok "Finished installing applications"
 
+## Install vscode extensions
+bot "Installing VS Code extensions"
+
+install_vscode_extension "ms-vscode.go"
+
+ok "Finished installing VS Code extensions"
+
 cleanup
 
 bot "Woot! All done. Kill this terminal and launch Bash"
