@@ -52,3 +52,9 @@ function install_script() {
 
   source ${script}
 }
+
+function install_vscode_extension() {
+  local extension=$1
+
+  code --install-extension ${extension}
+}
