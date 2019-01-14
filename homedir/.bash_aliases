@@ -19,13 +19,24 @@ for file in ${alias_files}; do
   . "${file}"
 done
 unset alias_files
+function_files=($(find -L "${DOTFILES}" -name functions.bash))
+for file in ${function_files}; do
+  . "${file}"
+done
+unset function_files
 
 if [ "$msys" = "true" ]; then
-  os_specific_alias_files=($(find -L "${DOTFILES}" -name alias.windows.bash))
+  os_specific_alias_files=($(find -L "${DOTFILES}" -name aliases.windows.bash))
+  os_specific_function_files=($(find -L "${DOTFILES}" -name functions.windows.bash))
 else
   os_specific_alias_files=($(find -L "${DOTFILES}" -name aliases.linux.bash))
+  os_specific_function_files=($(find -L "${DOTFILES}" -name functions.linux.bash))
 fi
 for file in ${os_specific_alias_files}; do
   . "${file}"
 done
+for file in ${os_specific_function_files}; do
+  . "${file}"
+done
 unset os_specific_alias_files
+unset os_specific_function_files
