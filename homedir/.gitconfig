@@ -1,6 +1,6 @@
 [user]
-    name = Shannon Pamperl
-	email = shanman190@gmail.com
+    name = GIT_FULLNAME
+    email = GIT_EMAIL
 [core]
     excludesfile = ~/.gitignore_global
-	autocrlf = true
+    autocrlf = CORE_AUTOCRLF
