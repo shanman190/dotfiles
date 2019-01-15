@@ -36,8 +36,14 @@ function link() {
   local source=$1
   local target=$2
 
-  if [[ -f ${target} ]]; then
-    rm ${target}
+  if [[ "$MSYS" == *"winsymlinks:nativestrict"* ]]; then
+    if [[ ! -L ${target} ]]; then
+      ln -s ${source} ${target}
+    fi
+  else
+    if [[ -f ${target} ]]; then
+      rm ${target}
+    fi
+    cp ${source} ${target}
   fi
-  cp ${source} ${target}
 }
