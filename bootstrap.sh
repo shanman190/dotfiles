@@ -48,7 +48,7 @@ ok
 ok "Finished cloning git repos"
 
 ## Install dotfiles
-if grep "name = GIT_FULLNAME" ./homedir/.gitconfig > /dev/null 2>&1 ; then
+if [[ ! -f ./homedir/.gitconfig ]] || grep "name = GIT_FULLNAME" ./homedir/.gitconfig > /dev/null 2>&1 ; then
   read -r -p "What is your first name? " firstname
   read -r -p "What is your last name? " lastname
 
@@ -64,6 +64,7 @@ if grep "name = GIT_FULLNAME" ./homedir/.gitconfig > /dev/null 2>&1 ; then
 
   running "Replacing items in .gitconfig with your info (${COL_YELLOW}${fullname}, ${email}${COL_RESET})"
 
+  cp ./homedir/.gitconfig.template ./homedir/.gitconfig
   sed -i "s/GIT_FULLNAME/${fullname}/" ./homedir/.gitconfig
   sed -i "s/GIT_EMAIL/${email}/" ./homedir/.gitconfig
   if [ "$msys" = "true" ]; then
@@ -77,7 +78,7 @@ bot "Creating symlinks for project dotfiles..."
 
 pushd ./homedir > /dev/null
   for file in .*; do
-    if [[ "${file}" == "." || "${file}" == ".." ]]; then
+    if [[ "${file}" == "." || "${file}" == ".." || "${file}" == ".gitconfig.template" ]]; then
       continue
     fi
 
