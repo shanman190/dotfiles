@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
+[[ "$DEBUG" == true ]] && set -x
 
 DOTFILES_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOTFILES_TEMP="${DOTFILES_ROOT}/tmp"
