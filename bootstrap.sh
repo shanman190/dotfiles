@@ -97,7 +97,7 @@ if [ "$msys" = "true" ]; then
   install_package "chocolatey"
   install_package "7zip"
   install_package "ditto"
-  install_package "dockertoolbox"
+  install_package "docker-toolbox"
   install_package "notepadplusplus"
   install_package "virtualbox"
   install_package "vscode"
