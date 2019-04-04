@@ -4,6 +4,8 @@
 [core]
   excludesfile = ~/.gitignore_global
   autocrlf = CORE_AUTOCRLF
+[fetch]
+  prune = true
 [push]
   default = current
 [alias]
