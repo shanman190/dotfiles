@@ -4,13 +4,13 @@
 
 # Install zip.exe as it's needed for sdkman...
 running "Installing sdkman"
-if [[ -d ~/opt/zip ]]; then
+if [[ ! -d ~/opt/zip ]]; then
     curl -q -s -L http://downloads.sourceforge.net/gnuwin32/zip-3.0-bin.zip -o ${DOTFILES_TEMP}/zip-3.0-bin.zip
     mkdir -p ~/opt/zip
     pushd ~/opt/zip > /dev/null
         unzip -u ${DOTFILES_TEMP}/zip-3.0-bin.zip > /dev/null
     popd > /dev/null
-    cp ~/opt/zip/bin/zip.exe ~/bin/zip.exe
+    ln -s ~/opt/zip/bin/zip.exe ~/bin/zip.exe
 fi
 
 # Finally install sdkman

@@ -34,6 +34,13 @@ if [ "$msys" = "true" ]; then
   requires_choco
 fi
 
+if [[ ! -d "${HOME}/bin" ]]; then
+  mkdir "${HOME}/bin"
+fi
+if [[ ! -d "${HOME}/opt" ]]; then
+  mkdir "${HOME}/opt"
+fi
+
 ok "Your system has all of the required software. Let's get to work!"
 
 setup
