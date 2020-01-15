@@ -96,6 +96,12 @@ pushd ./homedir > /dev/null
   done
 popd > /dev/null
 
+if [[ ! -d "${HOME}/.ssh" || ! -f "${HOME}/.ssh/id_rsa" ]]; then
+  bot "Configuring SSH..."
+
+  ssh-keygen -t rsa -b 4096 -f "${HOME}/.ssh/id_rsa"
+fi
+
 ok "Finished installing dotfiles"
 
 ## Install applications
