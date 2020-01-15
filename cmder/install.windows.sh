@@ -15,7 +15,7 @@ if [[ ! -d ~/opt/cmder ]]; then
 fi
 ok
 
-if [[ ! -n "$(ls -A /c/Windows/fonts/Ubuntu* 2> /dev/null)" ]]; then
+if [[ ! (-n "$(ls -A /c/Windows/Fonts/Ubuntu* 2> /dev/null)" && -n "$(ls -A ${HOME}/AppData/Local/Microsoft/Windows/Fonts/Ubuntu* 2> /dev/null)") ]]; then
     curl -q -s -L https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -o ${DOTFILES_TEMP}/ubuntu-font-family.zip
     pushd ${DOTFILES_TEMP} > /dev/null
         unzip -u ${DOTFILES_TEMP}/ubuntu-font-family.zip > /dev/null
