@@ -135,4 +135,8 @@ ok "Finished installing VS Code extensions"
 
 cleanup
 
+if [[ -f "${DOTFILES_ROOT}/bootstrap.local.sh" ]]; then
+  source "${DOTFILES_ROOT}/bootstrap.local.sh"
+fi
+
 bot "Woot! All done. Kill this terminal and launch Bash"
