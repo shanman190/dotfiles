@@ -116,6 +116,7 @@ if [ "$msys" = "true" ]; then
   install_package "virtualbox"
   install_package "vscode"
   install_package "wiztree"
+  install_package "jetbrainstoolbox"
 
   install_script "${DOTFILES_ROOT}/cmder/install.windows.sh"
   install_script "${DOTFILES_ROOT}/sdkman/install.windows.sh"
