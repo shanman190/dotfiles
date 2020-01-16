@@ -2,7 +2,7 @@
 
 set -e
 
-CMDER_VERSION="v1.3.6"
+CMDER_VERSION="v1.3.14"
 
 running "Installing cmder"
 if [[ ! -d ~/opt/cmder ]]; then
@@ -11,11 +11,11 @@ if [[ ! -d ~/opt/cmder ]]; then
     pushd ~/opt/cmder > /dev/null
         unzip -u ${DOTFILES_TEMP}/cmder_mini.zip > /dev/null
     popd > /dev/null
-    cp ${DOTFILES_ROOT}/cmder/ConEmu.xml ~/opt/cmder/vendor/conemu-maximus5/ConEmu.xml
+    ln -s ${DOTFILES_ROOT}/cmder/ConEmu.xml ~/opt/cmder/config/user-ConEmu.xml
 fi
 ok
 
-if [[ ! (-n "$(ls -A /c/Windows/Fonts/Ubuntu* 2> /dev/null)" && -n "$(ls -A ${HOME}/AppData/Local/Microsoft/Windows/Fonts/Ubuntu* 2> /dev/null)") ]]; then
+if [[ ! (-n "$(ls -A /c/Windows/Fonts/Ubuntu* 2> /dev/null)" || -n "$(ls -A ${HOME}/AppData/Local/Microsoft/Windows/Fonts/Ubuntu* 2> /dev/null)") ]]; then
     curl -q -s -L https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -o ${DOTFILES_TEMP}/ubuntu-font-family.zip
     pushd ${DOTFILES_TEMP} > /dev/null
         unzip -u ${DOTFILES_TEMP}/ubuntu-font-family.zip > /dev/null
