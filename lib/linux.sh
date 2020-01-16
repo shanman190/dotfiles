@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+function install_package_repository() {
+  error "Invalid usage"
+  exit 1
+}
+
 function install_package() {
   if [[ $# != 1 && $# != 2 ]]; then
     error "Invalid usage"
