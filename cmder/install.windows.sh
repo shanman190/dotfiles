@@ -2,16 +2,23 @@
 
 set -e
 
-CMDER_VERSION="v1.3.14"
+CMDER_VERSION="1.3.14"
 
-running "Installing cmder"
-if [[ ! -d ~/opt/cmder ]]; then
-    curl -q -s -L https://github.com/cmderdev/cmder/releases/download/${CMDER_VERSION}/cmder_mini.zip -o ${DOTFILES_TEMP}/cmder_mini.zip
+function install() {
+    curl -q -s -L https://github.com/cmderdev/cmder/releases/download/v${CMDER_VERSION}/cmder_mini.zip -o ${DOTFILES_TEMP}/cmder_mini.zip
     mkdir -p ~/opt/cmder
     pushd ~/opt/cmder > /dev/null
         unzip -u ${DOTFILES_TEMP}/cmder_mini.zip > /dev/null
     popd > /dev/null
     ln -s ${DOTFILES_ROOT}/cmder/ConEmu.xml ~/opt/cmder/config/user-ConEmu.xml
+}
+
+running "Installing cmder"
+if [[ ! -d ~/opt/cmder ]]; then
+    install
+else if ! (ls ~/opt/cmder/Version* | grep -q ${CMDER_VERSION}); then
+    rm -rf ~/opt/cmder
+    install
 fi
 ok
 
