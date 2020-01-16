@@ -133,10 +133,11 @@ install_vscode_extension "ms-vscode.go"
 
 ok "Finished installing VS Code extensions"
 
-cleanup
-
-if [[ -f "${DOTFILES_ROOT}/bootstrap.local.sh" ]]; then
-  source "${DOTFILES_ROOT}/bootstrap.local.sh"
+if [[ -f "${DOTFILES_ROOT}/local/bootstrap.local.sh" ]]; then
+  echo "Running local bootstrap"
+  source "${DOTFILES_ROOT}/local/bootstrap.local.sh"
 fi
+
+cleanup
 
 bot "Woot! All done. Kill this terminal and launch Bash"

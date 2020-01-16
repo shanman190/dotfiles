@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+function install_package_repository() {
+  if [[ $# != 2 ]]; then
+    error "Invalid usage"
+    exit 1
+  fi
+
+  local name=$1
+  local repo=$2
+  
+  choco source add -n="${name}" -s="${repo}"
+}
+
 function install_package() {
   if [[ $# != 1 && $# != 2 ]]; then
     error "Invalid usage"
