@@ -11,6 +11,12 @@ Invoke-WebRequest https://chocolatey.org/install.ps1 | Invoke-Expression
 # Setup MSYS to allow symlinks
 [System.Environment]::SetEnvironmentVariable('MSYS', 'winsymlinks:nativestrict', [System.EnvironmentVariableTarget]::User)
 
+# Reconfigure default apps
+If ((Get-ItemProperty "HKCU:\Software\Microsoft\windows\Shell\Associations\UrlAssociations\https\UserChoice").ProgId -ne "ChromeHTML") {
+	control.exe /name Microsoft.DefaultPrograms /page pageDefaultProgram
+	pause
+}
+
 # Install bash/git for Windows
 choco install git --yes --force --params "/WindowsTerminal"
 
