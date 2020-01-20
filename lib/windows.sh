@@ -24,22 +24,34 @@ function install_package() {
 
     running "Installing ${package}:${version}"
 
-    if ! choco list "${package}" --version ${version} 2> /dev/null | grep -q -E "^${package}\s"; then
+    if ! choco list "${package}" --version ${version} 2> /dev/null | grep -q -i -E "^${package}\s"; then
       error "Could not find package: ${package}:${version}"
       exit 1
     fi
 
-    choco install "${package}" --version "${version}" --yes > /dev/null
+    set +e
+    logs=$(choco install "${package}" --version "${version}" --yes)
+    if [[ $? != 0 ]]; then
+      echo $logs
+      exit 1
+    fi
+    set -e
     ok
   else
     running "Installing ${package}"
 
-    if ! choco list "${package}" 2> /dev/null | grep -q -E "^${package}\s"; then
+    if ! choco list "${package}" 2> /dev/null | grep -q -i -E "^${package}\s"; then
       error "Could not find package: ${package}"
       exit 1
     fi
 
-    choco install "${package}" --yes > /dev/null
+    set +e
+    logs=$(choco install "${package}" --yes)
+    if [[ $? != 0 ]]; then
+      echo $logs
+      exit 1
+    fi
+    set -e
     ok
   fi
 }
