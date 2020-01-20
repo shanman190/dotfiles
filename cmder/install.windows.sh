@@ -16,7 +16,7 @@ function install() {
 running "Installing cmder"
 if [[ ! -d ~/opt/cmder ]]; then
     install
-else if ! (ls ~/opt/cmder/Version* | grep -q ${CMDER_VERSION}); then
+elif ! (ls ~/opt/cmder/Version* | grep -q ${CMDER_VERSION}); then
     rm -rf ~/opt/cmder
     install
 fi
