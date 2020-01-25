@@ -21,4 +21,6 @@ If ((Get-ItemProperty "HKCU:\Software\Microsoft\windows\Shell\Associations\UrlAs
 choco install git --yes --force --params "/WindowsTerminal"
 
 # Start main installation script
-(Invoke-WebRequest https://raw.githubusercontent.com/shanman190/dotfiles/master/setup.sh).Content | & 'C:\Program Files\git\bin\bash.exe'
+Invoke-WebRequest https://raw.githubusercontent.com/shanman190/dotfiles/master/setup.sh -OutFile $TEMP\setup.sh
+& 'C:\Program Files\git\bin\bash.exe' -i $TEMP\setup.sh
+del $TEMP\setup.sh
