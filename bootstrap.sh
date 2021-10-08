@@ -130,6 +130,9 @@ if [ "$msys" = "true" ]; then
   install_script "${DOTFILES_ROOT}/cmder/install.windows.sh"
   install_script "${DOTFILES_ROOT}/sdkman/install.windows.sh"
 else
+  install_package "snap" "code" "--classic"
+  
+  install_script "${DOTFILES_ROOT}/jetbrains_toolbox/install.linux.sh"
   install_script "${DOTFILES_ROOT}/sdkman/install.linux.sh"
 fi
 

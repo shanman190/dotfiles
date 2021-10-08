@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set +x
+
 git clone -c core.symlinks=true https://github.com/shanman190/dotfiles.git "${HOME}/.dotfiles/"
 
 read -r -p "Do you have a local dotfiles repo to include? [no] " answer

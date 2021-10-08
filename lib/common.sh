@@ -50,7 +50,15 @@ function git_pull() {
 function install_script() {
   local script=$1
 
-  source ${script}
+  running "Running script ${script}"
+  
+  logs=$(source ${script} 2>&1)
+  if [[ $? != 0 ]]; then
+    echo $logs
+    exit 1
+  fi
+  
+  ok
 }
 
 function install_vscode_extension() {
