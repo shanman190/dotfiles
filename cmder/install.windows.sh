@@ -2,7 +2,7 @@
 
 set -e
 
-CMDER_VERSION="1.3.14"
+CMDER_VERSION="1.3.18"
 
 function install() {
     curl -q -s -L https://github.com/cmderdev/cmder/releases/download/v${CMDER_VERSION}/cmder_mini.zip -o ${DOTFILES_TEMP}/cmder_mini.zip

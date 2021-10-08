@@ -1,0 +1,23 @@
+[user]
+  name = Shannon Pamperl
+  email = spamperl@shelterinsurance.com
+[core]
+  excludesfile = ~/.gitignore_global
+  autocrlf = true
+[fetch]
+  prune = true
+[push]
+  default = current
+[alias]
+  aliases = config --get-regexp alias
+
+  # list aliases
+  graph = log --graph --abbrev-commit --decorate --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)'
+
+  # assume aliases
+  assume = update-index --assume-unchanged
+  unassume = update-index --no-assume-unchanged
+  assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+  assumeall = "!git status -s | awk '{print $2}' | xargs git assume"
+  unassumeall = "!git assumed | xargs git unassume"
+
