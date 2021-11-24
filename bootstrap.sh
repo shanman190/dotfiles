@@ -104,10 +104,10 @@ if [ ! -f ${HOME}/.gitconfig ]; then
 EOF
 fi
 
-if [[ ! -d "${HOME}/.ssh" || ! -f "${HOME}/.ssh/id_rsa" ]]; then
+if [[ ! -d "${HOME}/.ssh" || ! -f "${HOME}/.ssh/id_ed25519" ]]; then
   bot "Configuring SSH..."
 
-  ssh-keygen -t rsa -b 4096 -f "${HOME}/.ssh/id_rsa"
+  ssh-keygen -t ed25519 -b 4096 -f "${HOME}/.ssh/id_ed25519"
 fi
 
 ok "Finished installing dotfiles"
