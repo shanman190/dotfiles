@@ -56,7 +56,7 @@ ok
 ok "Finished cloning git repos"
 
 ## Install dotfiles
-if [[ ! -f ./homedir/.gitconfig-base ]] || grep "name = GIT_FULLNAME" ./homedir/.gitconfig-base > /dev/null 2>&1 ; then
+if [[ ! -f ./homedir/.gitconfig.d/defaults ]] || grep "name = GIT_FULLNAME" ./homedir/.gitconfig.d/defaults > /dev/null 2>&1 ; then
   read -r -p "What is your first name? " firstname
   read -r -p "What is your last name? " lastname
 
@@ -66,41 +66,42 @@ if [[ ! -f ./homedir/.gitconfig-base ]] || grep "name = GIT_FULLNAME" ./homedir/
 
   read -r -p "What is your email address? " email
   if [[ ! $email ]]; then
-    error "You must provide an email to configure .gitconfig-base"
+    error "You must provide an email to configure .gitconfig.d/defaults"
     exit 1
   fi
 
-  running "Replacing items in .gitconfig-base with your info (${COL_YELLOW}${fullname}, ${email}${COL_RESET})"
+  running "Replacing items in .gitconfig.d/defaults with your info (${COL_YELLOW}${fullname}, ${email}${COL_RESET})"
 
-  cp ./homedir/.gitconfig-base.template ./homedir/.gitconfig-base
-  sed -i "s/GIT_FULLNAME/${fullname}/" ./homedir/.gitconfig-base
-  sed -i "s/GIT_EMAIL/${email}/" ./homedir/.gitconfig-base
+  cp ./homedir/.gitconfig.d/defaults.template ./homedir/.gitconfig.d/defaults
+  sed -i "s/GIT_FULLNAME/${fullname}/" ./homedir/.gitconfig.d/defaults
+  sed -i "s/GIT_EMAIL/${email}/" ./homedir/.gitconfig.d/defaults
   if [ "$msys" = "true" ]; then
-    sed -i "s/CORE_AUTOCRLF/true/" ./homedir/.gitconfig-base
+    sed -i "s/CORE_AUTOCRLF/true/" ./homedir/.gitconfig.d/defaults
   else
-    sed -i "s/CORE_AUTOCRLF/input/" ./homedir/.gitconfig-base
+    sed -i "s/CORE_AUTOCRLF/input/" ./homedir/.gitconfig.d/defaults
   fi
 fi
 
 bot "Creating symlinks for project dotfiles..."
 
-pushd ./homedir > /dev/null
-  for file in .*; do
-    if [[ "${file}" == "." || "${file}" == ".." || "${file}" == ".gitconfig-base.template" ]]; then
-      continue
-    fi
+for file in $(find ./homedir/ -name .* -type f -printf "%f\n"); do
+  running "linking ~/${file} ..."
+  link "${DOTFILES_ROOT}/homedir/${file}" "${HOME}/${file}"
+  ok
+done
 
-    running "linking ~/${file} ..."
-    link "${DOTFILES_ROOT}/homedir/${file}" "${HOME}/${file}"
-    ok
-  done
-popd > /dev/null
+mkdir -p ${HOME}/.gitconfig.d/
+for file in $(find ./homedir/.gitconfig.d/ -type f -not -path *.template -printf "%f\n"); do
+  running "linking ~/.gitconfig.d/${file} ..."
+  link "${DOTFILES_ROOT}/homedir/.gitconfig.d/${file}" "${HOME}/.gitconfig.d/${file}"
+  ok
+done
 
 bot "Creating default .gitconfig..."
 if [ ! -f ${HOME}/.gitconfig ]; then
   cat <<EOF > ${HOME}/.gitconfig
 [include]
-  path = ~/.gitconfig-base
+  path = ~/.gitconfig.d/defaults
 EOF
 fi
 
