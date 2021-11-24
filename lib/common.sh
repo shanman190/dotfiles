@@ -64,5 +64,14 @@ function install_script() {
 function install_vscode_extension() {
   local extension=$1
 
-  code --install-extension ${extension}
+  if [[ ! -d "${DOTFILES_TEMP}/cache/" || ! -f "${DOTFILES_TEMP}/cache/packages.vscode" ]]; then
+    mkdir -p "${DOTFILES_TEMP}/cache/"
+    code --list-extensions > "${DOTFILES_TEMP}/cache/packages.vscode"
+  fi
+
+  running "Installing ${extension}"
+  if ! cat "${DOTFILES_TEMP}/cache/packages.vscode" | grep "${package}" > /dev/null; then
+    code --install-extension ${extension} > /dev/null
+  fi
+  ok
 }

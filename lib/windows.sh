@@ -18,40 +18,49 @@ function install_package() {
     exit 1
   fi
 
+  if [[ ! -d "${DOTFILES_TEMP}/cache/" || ! -f "${DOTFILES_TEMP}/cache/packages.system" ]]; then
+    mkdir -p "${DOTFILES_TEMP}/cache/"
+    choco list -l > "${DOTFILES_TEMP}/cache/packages.system"
+  fi
+
   local package=$1
   if [[ $# == 2 ]]; then
     local version=$2
 
     running "Installing ${package}:${version}"
 
-    if ! choco list "${package}" --version ${version} 2> /dev/null | grep -q -i -E "^${package}\s"; then
-      error "Could not find package: ${package}:${version}"
-      exit 1
-    fi
+    if ! cat "${DOTFILES_TEMP}/cache/packages.system" | grep "${package} ${version}" > /dev/null; then
+      if ! choco list "${package}" --version ${version} 2> /dev/null | grep -q -i -E "^${package}\s"; then
+        error "Could not find package: ${package}:${version}"
+        exit 1
+      fi
 
-    set +e
-    logs=$(choco install "${package}" --version "${version}" --yes)
-    if [[ $? != 0 ]]; then
-      echo $logs
-      exit 1
+      set +e
+      logs=$(choco install "${package}" --version "${version}" --yes)
+      if [[ $? != 0 ]]; then
+        echo $logs
+        exit 1
+      fi
+      set -e
     fi
-    set -e
     ok
   else
     running "Installing ${package}"
 
-    if ! choco list "${package}" 2> /dev/null | grep -q -i -E "^${package}\s"; then
-      error "Could not find package: ${package}"
-      exit 1
-    fi
+    if ! cat "${DOTFILES_TEMP}/cache/packages.system" | grep "${package}" > /dev/null; then
+      if ! choco list "${package}" 2> /dev/null | grep -q -i -E "^${package}\s"; then
+        error "Could not find package: ${package}"
+        exit 1
+      fi
 
-    set +e
-    logs=$(choco install "${package}" --yes)
-    if [[ $? != 0 ]]; then
-      echo $logs
-      exit 1
+      set +e
+      logs=$(choco install "${package}" --yes)
+      if [[ $? != 0 ]]; then
+        echo $logs
+        exit 1
+      fi
+      set -e
     fi
-    set -e
     ok
   fi
 }
