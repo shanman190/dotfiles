@@ -56,7 +56,7 @@ ok
 ok "Finished cloning git repos"
 
 ## Install dotfiles
-if [[ ! -f ./homedir/.gitconfig.d/defaults ]] || grep "name = GIT_FULLNAME" ./homedir/.gitconfig.d/defaults > /dev/null 2>&1 ; then
+if [[ ! -f "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults" ]] || grep "name = GIT_FULLNAME" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults" > /dev/null 2>&1 ; then
   read -r -p "What is your first name? " firstname
   read -r -p "What is your last name? " lastname
 
@@ -72,26 +72,26 @@ if [[ ! -f ./homedir/.gitconfig.d/defaults ]] || grep "name = GIT_FULLNAME" ./ho
 
   running "Replacing items in .gitconfig.d/defaults with your info (${COL_YELLOW}${fullname}, ${email}${COL_RESET})"
 
-  cp ./homedir/.gitconfig.d/defaults.template ./homedir/.gitconfig.d/defaults
-  sed -i "s/GIT_FULLNAME/${fullname}/" ./homedir/.gitconfig.d/defaults
-  sed -i "s/GIT_EMAIL/${email}/" ./homedir/.gitconfig.d/defaults
+  cp "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults.template" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults"
+  sed -i "s/GIT_FULLNAME/${fullname}/" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults"
+  sed -i "s/GIT_EMAIL/${email}/" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults"
   if [ "$msys" = "true" ]; then
-    sed -i "s/CORE_AUTOCRLF/true/" ./homedir/.gitconfig.d/defaults
+    sed -i "s/CORE_AUTOCRLF/true/" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults"
   else
-    sed -i "s/CORE_AUTOCRLF/input/" ./homedir/.gitconfig.d/defaults
+    sed -i "s/CORE_AUTOCRLF/input/" "${DOTFILES_ROOT}/homedir/.gitconfig.d/defaults"
   fi
 fi
 
 bot "Creating symlinks for project dotfiles..."
 
-for file in $(find ./homedir/ -name .* -type f -printf "%f\n"); do
+for file in $(find "${DOTFILES_ROOT}/homedir/" -name ".*" -type f -printf "%f\n"); do
   running "linking ~/${file} ..."
   link "${DOTFILES_ROOT}/homedir/${file}" "${HOME}/${file}"
   ok
 done
 
 mkdir -p ${HOME}/.gitconfig.d/
-for file in $(find ./homedir/.gitconfig.d/ -type f -not -path *.template -printf "%f\n"); do
+for file in $(find "${DOTFILES_ROOT}/homedir/.gitconfig.d/" -type f -not -path *.template -printf "%f\n"); do
   running "linking ~/.gitconfig.d/${file} ..."
   link "${DOTFILES_ROOT}/homedir/.gitconfig.d/${file}" "${HOME}/.gitconfig.d/${file}"
   ok

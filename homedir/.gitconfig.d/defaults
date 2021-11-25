@@ -2,7 +2,6 @@
   name = Shannon Pamperl
   email = spamperl@shelterinsurance.com
 [core]
-  excludesfile = ~/.gitignore_global
   autocrlf = true
 [fetch]
   prune = true
